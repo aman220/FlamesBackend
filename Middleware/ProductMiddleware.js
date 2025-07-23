@@ -67,3 +67,20 @@ exports.deleteproductbyid = async (req, res) => {
         return res.json(500).json({message :error.message})
     }
 }
+
+
+exports.updateproduct = async(req ,res)=>{
+    const {id} = req.params;
+    const updates = req.body;
+
+    try {
+        const updateproduct =  await productModel.findByIdAndUpdate(id , updates , {new : false, runValidators:true});
+        if(!updateproduct){
+            res.status(404).json({message :"Product not found in db"})
+        }
+        const getupdatedproduct = await productModel.findById(id)
+        return  res.status(200).json({message:"product update sucess" , product:getupdatedproduct});
+    } catch (error) {
+        return res.status(500).json({message :error.message})
+    }
+}
